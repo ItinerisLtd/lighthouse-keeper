@@ -6,6 +6,7 @@ version: 2.1
 
 description: |
   Record lighthouse reports in git repository automatically
+  Source Code: https://github.com/ItinerisLtd/lighthouse-keeper/blob/master/src/@orb.yml
 
 executors:
   node:
