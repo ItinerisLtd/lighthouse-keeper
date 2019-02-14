@@ -1,4 +1,4 @@
-# lighthouse-keeper
+# Lighthouse Keeper
 
 [![CircleCI](https://circleci.com/gh/ItinerisLtd/lighthouse-keeper.svg?style=svg)](https://circleci.com/gh/ItinerisLtd/lighthouse-keeper)
 
@@ -9,6 +9,13 @@ $ openssl genrsa -out xxx 4096
 $ sudo chmod 600 xxx
 $ ssh-keygen -y -f xxx > xxx.pub
 ```
+
+## Generate `.circleci/config.yml`
+
+1. `$ wget https://raw.githubusercontent.com/ItinerisLtd/lighthouse-keeper/master/src/generate_config.rb`
+1. Edit the `urls` array in `generate_config.rb`
+1. `$ ruby generate_config.rb`
+1. Edit `CHANGEME` in the newly generated yaml file
 
 ## Manual Trigger
 

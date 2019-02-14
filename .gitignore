@@ -1,0 +1,4 @@
+.idea/
+
+# Not to commit generated yaml
+*change-me*
