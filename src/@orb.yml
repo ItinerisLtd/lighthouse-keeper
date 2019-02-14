@@ -13,7 +13,7 @@ executors:
       - image: circleci/node:10-browsers
   ruby:
     docker:
-      - image: circleci/ruby
+      - image: circleci/ruby:2.6.1
 
 jobs:
   measure:
