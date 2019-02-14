@@ -85,6 +85,7 @@ jobs:
           at: ~/project
 
       - run: git add results/*.{html,json}
+      - run: git status
 
       - run: curl << parameters.readme_generator_script >> | ruby
       - run: git add README.md
