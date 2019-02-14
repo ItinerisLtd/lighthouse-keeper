@@ -1,0 +1,97 @@
+version: 2.1
+
+#####################################################################################
+# GitHub: https://github.com/ItinerisLtd/lighthouse-keeper/blob/master/src/@orb.yml #
+#####################################################################################
+
+description: |
+  Record lighthouse reports in git repository automatically
+
+executors:
+  node:
+    docker:
+      - image: circleci/node:10-browsers
+  ruby:
+    docker:
+      - image: circleci/ruby
+
+jobs:
+  measure:
+    parameters:
+      id:
+        type: string
+        description: Identifier for the URL, must not special characters
+      url:
+        type: string
+        description: URL to be tested
+      executor:
+        type: executor
+        default: node
+    executor: << parameters.executor >>
+    steps:
+      - run: node --version
+      - run: yarn versions
+
+      - restore_cache:
+          keys:
+            - v0-itinerisltd-lighthouse-keeper-yarn-cache-{{ arch }}-
+      - run: yarn global add lighthouse
+      - save_cache:
+          key: v0-itinerisltd-lighthouse-keeper-yarn-cache-{{ arch }}-{{ epoch }}
+          paths:
+            - ~/.yarn/cache
+
+      - run: $(yarn global bin)/lighthouse --version
+
+      - run: mkdir -p results/<< parameters.id >>
+      - run:
+          command: $(yarn global bin)/lighthouse << parameters.url >> --output=json --output=html --verbose || true
+          working_directory: results/<< parameters.id >>
+
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - results
+
+  commit:
+    parameters:
+      git_user_email:
+        type: string
+        description: Git committer email
+      git_user_name:
+        type: string
+        description: Git committer name
+      git_ssh_fingerprint:
+        type: string
+        description: Git committer SSH fingerprint (with write access to the git repository)
+      readme_generator_script:
+        type: string
+        description: Git committer SSH fingerprint
+        default: https://raw.githubusercontent.com/ItinerisLtd/lighthouse-keeper/master/src/generate_readme.rb
+      executor:
+        type: executor
+        default: ruby
+    executor: << parameters.executor >>
+    steps:
+      - run: ruby --version
+
+      - run: git config --global user.email << parameters.git_user_email >>
+      - run: git config --global user.name << parameters.git_user_name >>
+
+      - checkout
+      - attach_workspace:
+          at: ~/project
+
+      - run: git add results/*.{html,json}
+
+      - run: curl << parameters.readme_generator_script >> | ruby
+      - run: git add README.md
+
+      - run: git status
+      - run: |
+          git commit -m "[ci skip] Add reports - CircleCI #$CIRCLE_BUILD_NUM" -m $CIRCLE_BUILD_URL
+
+      - add_ssh_keys:
+          fingerprints:
+            - << parameters.git_ssh_fingerprint >>
+      - run: git push origin master
