@@ -1,8 +1,9 @@
 version: 2.1
 
-#####################################################################################
-# GitHub: https://github.com/ItinerisLtd/lighthouse-keeper/blob/master/src/@orb.yml #
-#####################################################################################
+#######################################################################################
+# GitHub:   https://github.com/ItinerisLtd/lighthouse-keeper/blob/master/src/@orb.yml #
+# CircleCI: https://circleci.com/orbs/registry/orb/itinerisltd/lighthouse-keeper      #
+#######################################################################################
 
 description: |
   Record lighthouse reports in git repository automatically
