@@ -2,6 +2,14 @@
 
 [![CircleCI](https://circleci.com/gh/ItinerisLtd/lighthouse-keeper.svg?style=svg)](https://circleci.com/gh/ItinerisLtd/lighthouse-keeper)
 
+### SSH Key
+
+```sh-session
+$ openssl genrsa -out xxx 4096
+$ sudo chmod 600 xxx
+$ ssh-keygen -y -f xxx > xxx.pub
+```
+
 ## Manual Trigger
 
 ```sh-session
